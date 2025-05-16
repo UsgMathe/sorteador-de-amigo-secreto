@@ -22,7 +22,7 @@ export function Card({ children, className, ...props }: ComponentProps<'div'>) {
 
       <div
         className={cn(
-          'grow h-full bg-background p-15 border-t-4 border-x-4 rounded-t-[5rem] relative',
+          'grow flex flex-col h-full bg-background p-15 border-t-4 border-x-4 rounded-t-[5rem] relative',
           className
         )}
         {...props}

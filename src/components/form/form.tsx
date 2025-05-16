@@ -1,17 +1,17 @@
 import { UserPlus } from 'lucide-react';
 import { FormEvent, useRef, useState } from 'react';
-import { useAddPerson } from '../../hooks/use-add-person';
 import { useErrorMessage } from '../../hooks/use-error-message';
 import { usePersonsList } from '../../hooks/use-persons-list';
 import { InputButton } from '../add-input/input-button';
-import { Card } from '../card';
 import { PersonsList } from '../persons-list/persons-list';
 
 interface FormProps {}
 
 export const Form = ({}: FormProps) => {
-  const addPerson = useAddPerson();
-  const persons = usePersonsList();
+  const { state: personsList } = usePersonsList();
+
+  const { add: addPerson } = usePersonsList();
+
   const { errorMessage } = useErrorMessage();
 
   const [name, setName] = useState<string>('');
@@ -20,37 +20,48 @@ export const Form = ({}: FormProps) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     addPerson(name);
     setName('');
-
     inputRef.current?.focus();
   };
 
   return (
-    <Card>
-      <form onSubmit={handleSubmit} className="flex flex-col items-center">
-        <div className="space-y-10">
-          <h1
-            className="text-3xl text-secondary font-semibold font-poppins"
-            onClick={() => inputRef.current?.focus()}
-          >
-            Vamos começar!
-          </h1>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center space-y-10 "
+    >
+      <div className="space-y-8">
+        <h1
+          className="text-3xl text-center text-secondary font-semibold font-poppins"
+          onClick={() => inputRef.current?.focus()}
+        >
+          Vamos começar!
+        </h1>
 
-          <InputButton
-            ref={inputRef}
-            icon={UserPlus}
-            buttonText="Adicionar"
-            value={name}
-            onValueChange={setName}
-            disabledButton={!name}
-            errorMessage={errorMessage}
-          />
-        </div>
+        <InputButton
+          ref={inputRef}
+          icon={UserPlus}
+          buttonText="Adicionar"
+          value={name}
+          onValueChange={setName}
+          disabledButton={!name.trim()}
+          errorMessage={errorMessage}
+        />
+      </div>
 
-        <PersonsList className="mt-8" />
-      </form>
-    </Card>
+      <div className="mt-4">
+        <h2 className="mb-4 border-b-2 w-fit mx-auto">
+          Participantes
+          {!!personsList.length && (
+            <span className="text-sm"> ({personsList.length})</span>
+          )}
+        </h2>
+        {!!personsList.length ? (
+          <PersonsList persons={personsList} />
+        ) : (
+          <p className="text-muted-foreground">Sem participantes</p>
+        )}
+      </div>
+    </form>
   );
 };

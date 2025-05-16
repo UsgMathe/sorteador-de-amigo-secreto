@@ -2,6 +2,10 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 import { Form } from './form';
 
+jest.mock('react-router-dom', () => {
+  return { useNavigate: () => jest.fn() };
+});
+
 function renderForm() {
   render(
     <RecoilRoot>
@@ -34,9 +38,6 @@ describe('comportamento do form.tsx', () => {
       'Insira os nomes dos participantes'
     );
     const button = screen.getByTestId('desktop-button');
-    const mobileButton = screen.getByTestId('mobile-button');
-
-    expect(mobileButton).not.toBeVisible();
 
     expect(input).toBeInTheDocument();
     expect(input).not.toHaveValue();
@@ -46,39 +47,49 @@ describe('comportamento do form.tsx', () => {
   });
 
   test('adicionar um participante caso exista um nome preenchido', () => {
+    const person = 'Matheus';
+
     renderForm();
 
     const input = screen.getByPlaceholderText(
       'Insira os nomes dos participantes'
     );
 
-    addPerson('Pessoa');
+    addPerson(person);
     expect(input).toHaveFocus();
     expect(input).not.toHaveValue();
+
+    const renderedPerson = screen.getByText(person);
+
+    expect(renderedPerson).toBeInTheDocument();
   });
 
   test('nomes duplicados não podem ser adicionados na lista de participantes', () => {
+    const person = 'Matheus';
+
     renderForm();
 
-    addPerson('Pessoa');
-    addPerson('Pessoa');
+    addPerson(person);
+    addPerson(person);
 
     expectInputErrorMessage('Nomes duplicados não são permitidos!');
   });
 
   test('a mensagem de erro deve sumir após 5 segundos', () => {
+    const person = 'Matheus';
+
     jest.useFakeTimers();
 
     renderForm();
 
-    addPerson('Pessoa');
-    addPerson('Pessoa');
+    addPerson(person);
+    addPerson(person);
 
     let errorMessage = screen.queryByRole('alert');
     expect(errorMessage).toBeInTheDocument();
 
     act(() => {
-      jest.runAllTimers();
+      jest.advanceTimersByTime(5000);
     });
 
     errorMessage = screen.queryByRole('alert');

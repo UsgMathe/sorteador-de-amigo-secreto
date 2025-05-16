@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import { Form } from './components/form/form';
+import { CreateListPage } from './pages/create-list/create-list.page';
+import { ShufflePage } from './pages/shuffle/shuffle.page';
 
 function App() {
   return (
@@ -8,7 +9,8 @@ function App() {
       <BrowserRouter>
         <RecoilRoot>
           <Routes>
-            <Route path="/" element={<Form />} />
+            <Route path="/" element={<CreateListPage />} />
+            <Route path="/sorteio" element={<ShufflePage />} />
           </Routes>
         </RecoilRoot>
       </BrowserRouter>

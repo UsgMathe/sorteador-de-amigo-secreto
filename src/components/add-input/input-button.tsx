@@ -51,7 +51,7 @@ export const InputButton = forwardRef<HTMLInputElement, AddInputProps>(
           aria-invalid={!!errorMessage}
           htmlFor="persons-input"
           className={cn(
-            'rounded-4xl border-2 flex items-center overflow-hidden space-x-8 pl-8 max-w-2xl bg-white w-full input-shadow aria-invalid:border-red-600 ',
+            'rounded-4xl border-2 flex items-center overflow-hidden space-x-8 pl-8 max-w-4xl bg-white w-full input-shadow aria-invalid:border-red-500 ',
             className
           )}
         >
@@ -72,7 +72,7 @@ export const InputButton = forwardRef<HTMLInputElement, AddInputProps>(
           <button
             data-testid="desktop-button"
             disabled={disabledButton}
-            className="hidden sm:block rounded-r-2xl border-l text-sm py-5 px-12 cursor-pointer bg-muted-background text-button-text hover:bg-secondary hover:text-white transition-colors duration-300 disabled:pointer-events-none disabled:opacity-70 select-none"
+            className="hidden sm:block rounded-r-2xl border-l text-sm py-5 px-12 cursor-pointer disabled:bg-muted-background text-white disabled:text-button-text hover:bg-secondary hover:text-white transition-colors duration-300 disabled:pointer-events-none disabled:opacity-70 select-none bg-secondary hover:opacity-95"
             onClick={onClick}
           >
             {buttonText}
@@ -80,7 +80,10 @@ export const InputButton = forwardRef<HTMLInputElement, AddInputProps>(
         </label>
 
         {errorMessage && (
-          <p role="alert" className="mt-2 ml-2 text-red-500 text-sm">
+          <p
+            role="alert"
+            className="mt-4 rounded-lg text-center bg-red-100 border-red-500 border py-3 text-red-500 text-sm"
+          >
             {errorMessage}
           </p>
         )}
@@ -90,7 +93,7 @@ export const InputButton = forwardRef<HTMLInputElement, AddInputProps>(
           disabled={disabledButton}
           onClick={onClick}
           variant="secondary"
-          className="sm:hidden"
+          className="sm:hidden  disabled:bg-muted-background disabled:text-button-text text-white"
         >
           {buttonText}
         </Button>
@@ -98,5 +101,3 @@ export const InputButton = forwardRef<HTMLInputElement, AddInputProps>(
     );
   }
 );
-
-InputButton.displayName = 'InputButton';
